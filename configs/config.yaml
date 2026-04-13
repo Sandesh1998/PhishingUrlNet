@@ -1,0 +1,88 @@
+# ============================================================
+# PhishNet Configuration - Sandesh Poudel B01818884
+# ============================================================
+project:
+  name: "PhishNet"
+  version: "1.0.0"
+  seed: 42
+
+paths:
+  data_raw: "data/raw"
+  data_processed: "data/processed"
+  models: "results/models"
+  plots: "results/plots"
+  metrics: "results/metrics"
+  logs: "results/logs"
+
+datasets:
+  phishtank_url: "https://data.phishtank.com/data/online-valid.csv"
+  tranco_url: "https://tranco-list.eu/top-1m.csv.zip"
+
+features:
+  max_url_length: 200
+  char_vocab_size: 128
+  embedding_dim: 64
+
+preprocessing:
+  test_size: 0.2
+  val_size: 0.1
+  use_smote: true
+  random_state: 42
+  scaler: "standard"
+
+cnn:
+  filters: [128, 64, 32]
+  kernel_sizes: [3, 3, 3]
+  dropout_rate: 0.4
+  batch_norm: true
+  dense_units: [128, 64]
+  learning_rate: 0.001
+  batch_size: 256
+  epochs: 50
+  early_stopping_patience: 7
+  optimizer: "adam"
+
+cnn_tcn:
+  cnn_filters: 128
+  cnn_kernel: 3
+  tcn_filters: 64
+  tcn_kernel_size: 3
+  tcn_dilations: [1, 2, 4, 8, 16]
+  tcn_dropout: 0.2
+  dense_units: [128, 64]
+  dropout_rate: 0.4
+  batch_norm: true
+  learning_rate: 0.001
+  batch_size: 256
+  epochs: 50
+  early_stopping_patience: 7
+  optimizer: "adam"
+
+baselines:
+  random_forest:
+    n_estimators: 200
+    max_depth: null
+    min_samples_split: 2
+    n_jobs: -1
+  svm:
+    C: 1.0
+    kernel: "rbf"
+    gamma: "scale"
+    probability: true
+  dnn:
+    hidden_layers: [256, 128, 64]
+    dropout_rate: 0.3
+    learning_rate: 0.001
+    batch_size: 256
+    epochs: 30
+
+evaluation:
+  cv_folds: 5
+  latency_warmup_runs: 10
+  latency_benchmark_runs: 100
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+  model: "cnn_tcn"
+  max_batch_size: 500

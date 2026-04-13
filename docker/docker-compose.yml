@@ -1,0 +1,41 @@
+# ============================================================
+# PhishNet Docker Compose
+# Sandesh Poudel | B01818884 | UWS MSc Cybersecurity
+# ============================================================
+
+version: "3.9"
+
+services:
+  phishnet-api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: phishnet-api
+    ports:
+      - "8000:8000"
+    volumes:
+      # Persist trained models and results outside container
+      - ../results:/app/results
+      - ../data:/app/data
+    environment:
+      - PYTHONPATH=/app
+      - TF_CPP_MIN_LOG_LEVEL=2
+    restart: unless-stopped
+    networks:
+      - phishnet-net
+
+  # MLflow tracking server (optional — comment out if not needed)
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.6.0
+    container_name: mlflow-server
+    ports:
+      - "5000:5000"
+    volumes:
+      - ../results/mlruns:/mlruns
+    command: mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri /mlruns
+    networks:
+      - phishnet-net
+
+networks:
+  phishnet-net:
+    driver: bridge
