@@ -1,6 +1,6 @@
 # PhishNet: Real-Time Phishing URL Detection with Hybrid Deep Learning
-**Student:** Sandesh Poudel | **ID:** B01818884 | **UWS MSc Cybersecurity 2025/26**
-**Supervisor:** Dr Manesh Thankappan
+Sandesh Poudel | **UWS MSc Cybersecurity 2025/26**
+
 
 ## Project Overview
 
